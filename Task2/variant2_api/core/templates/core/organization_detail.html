@@ -1,0 +1,46 @@
+{% extends "index.html" %}
+{% block title %}{{ object.organization_name }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="kicker">Организация</div>
+    <h1>{{ object.organization_name }}</h1>
+  </div>
+  <div class="actions">
+    <a class="btn ghost" href="{% url 'core:organization-list' %}">К списку</a>
+    <a class="btn" href="{% url 'core:organization-update' object.pk %}">Изменить</a>
+    <a class="btn danger" href="{% url 'core:organization-delete' object.pk %}">Удалить</a>
+  </div>
+</div>
+<div class="grid-2">
+  <div class="card">
+    <div class="card-title">Данные</div>
+    <dl class="dl">
+      <div><dt>Основана</dt><dd>{{ object.founding_date }}</dd></div>
+      <div><dt>Адрес</dt><dd>{{ object.address }}</dd></div>
+      <div><dt>Директор</dt><dd>{{ object.director_name }}</dd></div>
+    </dl>
+  </div>
+  <div class="card">
+    <div class="card-title">Сотрудники</div>
+    {% if object.memberships.all %}
+    <table class="table compact">
+      <thead><tr><th>Пользователь</th><th>Должность</th><th>Прием</th><th>Увольнение</th></tr></thead>
+      <tbody>
+        {% for m in object.memberships.all %}
+        <tr>
+          <td><a class="link" href="{% url 'core:membership-detail' m.pk %}">{{ m.user }}</a></td>
+          <td>{{ m.position }}</td>
+          <td class="muted">{{ m.hire_date }}</td>
+          <td class="muted">{{ m.dismissal_date|default:"—" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty">Сотрудников пока нет</div>
+    {% endif %}
+    <div class="mt"><a class="btn sm" href="{% url 'core:membership-create' %}?organization={{ object.pk }}">Добавить сотрудника</a></div>
+  </div>
+</div>
+{% endblock %}

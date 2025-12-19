@@ -1,0 +1,29 @@
+
+{% extends "index.html" %}
+{% block title %}Должности{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Должности</h1>
+  <div class="actions"><a class="btn" href="{% url 'core:position-create' %}">Добавить</a></div>
+</div>
+{% if object_list %}
+<table class="table">
+  <thead><tr><th>Название</th><th>Сотрудников</th><th></th></tr></thead>
+  <tbody>
+    {% for p in object_list %}
+    <tr>
+      <td><a class="link" href="{% url 'core:position-detail' p.pk %}">{{ p.name }}</a></td>
+      <td class="muted">{{ p.memberships.count }}</td>
+      <td class="right">
+        <a class="btn ghost sm" href="{% url 'core:position-update' p.pk %}">Изменить</a>
+        <a class="btn danger sm" href="{% url 'core:position-delete' p.pk %}">Удалить</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty">Пока нет должностей</div>
+{% endif %}
+{% include "core/pagination.html" %}
+{% endblock %}

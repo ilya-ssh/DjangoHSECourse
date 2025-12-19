@@ -1,0 +1,65 @@
+
+import core.models
+import django.db.models.deletion
+import django.utils.timezone
+from django.conf import settings
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    initial = True
+
+    dependencies = [migrations.swappable_dependency(settings.AUTH_USER_MODEL)]
+
+    operations = [
+        migrations.CreateModel(
+            name='Position',
+            fields=[('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+            ('name', models.CharField(max_length=50, unique=True))],
+            options={'verbose_name': 'Должность',
+            'verbose_name_plural': 'Должности',
+            'ordering': ['name']},
+        ),
+        migrations.CreateModel(
+            name='Membership',
+            fields=[('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+            ('hire_date', models.DateField(default=django.utils.timezone.localdate)),('dismissal_date', models.DateField(blank=True, null=True)),
+            ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='memberships', to=settings.AUTH_USER_MODEL))],
+            options={
+                'verbose_name': 'Сотрудник в организации',
+                'verbose_name_plural': 'Сотрудники в организациях',
+                'ordering': ['-hire_date', 'organization__organization_name', 'user__username'],
+            },
+        ),
+        migrations.CreateModel(
+            name='Organization',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('organization_name', models.CharField(max_length=50)),
+                ('founding_date', models.DateField(default=django.utils.timezone.localdate)),
+                ('address', models.CharField(max_length=200)),
+                ('director_name', models.CharField(max_length=50)),
+                ('users', models.ManyToManyField(blank=True, related_name='organizations', through='core.Membership', to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'verbose_name': 'Организация',
+                'verbose_name_plural': 'Организации',
+                'ordering': ['organization_name'],
+            },
+        ),
+        migrations.AddField(
+            model_name='membership',
+            name='organization',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='memberships', to='core.organization'),
+        ),
+        migrations.AddField(
+            model_name='membership',
+            name='position',
+            field=models.ForeignKey(default=core.models.default_position_id, on_delete=django.db.models.deletion.SET_DEFAULT, related_name='memberships', to='core.position'),
+        ),
+        migrations.AlterUniqueTogether(
+            name='membership',
+            unique_together={('user', 'organization')},
+        ),
+    ]

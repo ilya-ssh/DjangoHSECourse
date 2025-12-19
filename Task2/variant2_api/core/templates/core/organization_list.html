@@ -1,0 +1,29 @@
+{% extends "index.html" %}
+{% block title %}Организации{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Организации</h1>
+  <div class="actions"><a class="btn" href="{% url 'core:organization-create' %}">Добавить</a></div>
+</div>
+{% if object_list %}
+<table class="table">
+  <thead><tr><th>Название</th><th>Основана</th><th>Директор</th><th></th></tr></thead>
+  <tbody>
+    {% for o in object_list %}
+    <tr>
+      <td><a class="link" href="{% url 'core:organization-detail' o.pk %}">{{ o.organization_name }}</a></td>
+      <td class="muted">{{ o.founding_date }}</td>
+      <td>{{ o.director_name }}</td>
+      <td class="right">
+        <a class="btn ghost sm" href="{% url 'core:organization-update' o.pk %}">Изменить</a>
+        <a class="btn danger sm" href="{% url 'core:organization-delete' o.pk %}">Удалить</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty">Пока нет организаций</div>
+{% endif %}
+{% include "core/pagination.html" %}
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "index.html" %}
+{% block title %}{{ object.user }} — {{ object.organization }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="kicker">Членство</div>
+    <h1>{{ object.user }} · {{ object.organization }}</h1>
+  </div>
+  <div class="actions">
+    <a class="btn ghost" href="{% url 'core:membership-list' %}">К списку</a>
+    <a class="btn" href="{% url 'core:membership-update' object.pk %}">Изменить</a>
+    <a class="btn danger" href="{% url 'core:membership-delete' object.pk %}">Удалить</a>
+  </div>
+</div>
+<div class="grid-2">
+  <div class="card">
+    <div class="card-title">Данные</div>
+    <dl class="dl">
+      <div><dt>Пользователь</dt><dd>{{ object.user }}</dd></div>
+      <div><dt>Организация</dt><dd><a class="link" href="{% url 'core:organization-detail' object.organization_id %}">{{ object.organization }}</a></dd></div>
+      <div><dt>Должность</dt><dd><a class="link" href="{% url 'core:position-detail' object.position_id %}">{{ object.position }}</a></dd></div>
+      <div><dt>Принят</dt><dd>{{ object.hire_date }}</dd></div>
+      <div><dt>Уволен</dt><dd>{{ object.dismissal_date|default:"—" }}</dd></div>
+    </dl>
+  </div>
+  <div class="card">
+    <div class="card-title">Действия</div>
+    <div class="actions">
+      <a class="btn sm" href="{% url 'core:membership-create' %}?user={{ object.user_id }}">Добавить этому пользователю организацию</a>
+      <a class="btn sm" href="{% url 'core:membership-create' %}?organization={{ object.organization_id }}">Добавить сотрудника в эту организацию</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

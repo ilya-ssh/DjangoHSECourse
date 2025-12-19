@@ -1,0 +1,61 @@
+
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Организации{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <div class="topbar">
+    <div class="container nav">
+      <a class="brand" href="{% url 'core:home' %}"><span class="badge">Суперучёт Суперорганизаций!</span><span>Организации</span></a>
+      <div class="navlinks">
+        <a class="link" href="{% url 'core:organization-list' %}">Организации</a>
+        <a class="link" href="{% url 'core:position-list' %}">Должности</a>
+        <a class="link" href="{% url 'core:membership-list' %}">Состав</a>
+        <a class="link" href="{% url 'about' %}">О нас</a>
+        {% if user.is_authenticated %}
+          <a class="btn ghost sm" href="/admin/">Админка</a>
+          <a class="btn ghost sm" href="/admin/logout/">Выйти</a>
+        {% else %}
+          <a class="btn ghost sm" href="/admin/login/">Войти</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <main class="container">
+    {% block content %}
+    <section class="hero">
+      <div class="kicker">Супер компания</div>
+      <h1>Пользователи и организации</h1>
+      <p class="sub">Крутой каунтер!</p>
+      <div class="stats">
+        <div class="pill"><strong>{{ org_count }}</strong><span class="muted"> организаций</span></div>
+        <div class="pill"><strong>{{ pos_count }}</strong><span class="muted"> должностей</span></div>
+        <div class="pill"><strong>{{ mem_count }}</strong><span class="muted"> записей</span></div>
+        <div class="pill"><strong>{{ user_count }}</strong><span class="muted"> пользователей</span></div>
+      </div>
+    </section>
+    <div class="grid">
+      <a class="card" href="{% url 'core:organization-list' %}">
+        <div class="card-title">Организации</div>
+        <div class="muted">Список, добавление, редактирование, удаление....</div>
+      </a>
+      <a class="card" href="{% url 'core:position-list' %}">
+        <div class="card-title">Должности</div>
+        <div class="muted">Справочник должностей с дефолтной позицией</div>
+      </a>
+      <a class="card" href="{% url 'core:membership-list' %}">
+        <div class="card-title">Состав</div>
+        <div class="muted">Пользователи в организациях на должностях</div>
+      </a>
+    </div>
+    {% endblock %}
+    <div class="footer"></div>
+  </main>
+</body>
+</html>

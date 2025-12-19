@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+{% block title %}Удаление{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Удалить</h1>
+  <div class="actions">{% if cancel_url %}<a class="btn ghost" href="{{ cancel_url }}">Отмена</a>{% endif %}</div>
+</div>
+<form method="post" class="card form">
+  {% csrf_token %}
+  <p>Точно удалить <strong>{{ object }}</strong>?</p>
+  <div class="form-actions">
+    <button class="btn danger" type="submit">Удалить</button>
+  </div>
+</form>
+{% endblock %}

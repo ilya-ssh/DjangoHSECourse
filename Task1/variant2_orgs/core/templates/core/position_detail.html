@@ -1,0 +1,36 @@
+
+{% extends "index.html" %}
+{% block title %}{{ object.name }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="kicker">Должность</div>
+    <h1>{{ object.name }}</h1>
+  </div>
+  <div class="actions">
+    <a class="btn ghost" href="{% url 'core:position-list' %}">К списку</a>
+    <a class="btn" href="{% url 'core:position-update' object.pk %}">Изменить</a>
+    <a class="btn danger" href="{% url 'core:position-delete' object.pk %}">Удалить</a>
+  </div>
+</div>
+<div class="card">
+  <div class="card-title">Сотрудники на должности</div>
+  {% if object.memberships.all %}
+  <table class="table compact">
+    <thead><tr><th>Пользователь</th><th>Организация</th><th>Прием</th><th>Увольнение</th></tr></thead>
+    <tbody>
+      {% for m in object.memberships.all %}
+      <tr>
+        <td><a class="link" href="{% url 'core:membership-detail' m.pk %}">{{ m.user }}</a></td>
+        <td><a class="link" href="{% url 'core:organization-detail' m.organization_id %}">{{ m.organization }}</a></td>
+        <td class="muted">{{ m.hire_date }}</td>
+        <td class="muted">{{ m.dismissal_date|default:"—" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">Пока нет сотрудников</div>
+  {% endif %}
+</div>
+{% endblock %}

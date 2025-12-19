@@ -1,0 +1,15 @@
+{% if is_paginated %}
+<nav class="pager actions">
+  {% if page_obj.has_previous %}
+    <a class="btn ghost sm" href="?page={{ page_obj.previous_page_number }}">Назад</a>
+  {% else %}
+    <span class="btn ghost sm disabled">Назад</span>
+  {% endif %}
+  <span class="muted">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+  {% if page_obj.has_next %}
+    <a class="btn ghost sm" href="?page={{ page_obj.next_page_number }}">Вперёд</a>
+  {% else %}
+    <span class="btn ghost sm disabled">Вперёд</span>
+  {% endif %}
+</nav>
+{% endif %}

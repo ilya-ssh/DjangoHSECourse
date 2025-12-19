@@ -1,0 +1,31 @@
+{% extends "index.html" %}
+{% block title %}Состав{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Состав организаций</h1>
+  <div class="actions"><a class="btn" href="{% url 'core:membership-create' %}">Добавить</a></div>
+</div>
+{% if object_list %}
+<table class="table">
+  <thead><tr><th>Пользователь</th><th>Организация</th><th>Должность</th><th>Прием</th><th>Увольнение</th><th></th></tr></thead>
+  <tbody>
+    {% for m in object_list %}
+    <tr>
+      <td>{{ m.user }}</td>
+      <td><a class="link" href="{% url 'core:organization-detail' m.organization_id %}">{{ m.organization }}</a></td>
+      <td><a class="link" href="{% url 'core:membership-detail' m.pk %}">{{ m.position }}</a></td>
+      <td class="muted">{{ m.hire_date }}</td>
+      <td class="muted">{{ m.dismissal_date|default:"—" }}</td>
+      <td class="right">
+        <a class="btn ghost sm" href="{% url 'core:membership-update' m.pk %}">Изменить</a>
+        <a class="btn danger sm" href="{% url 'core:membership-delete' m.pk %}">Удалить</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty">Пока нет записей</div>
+{% endif %}
+{% include "core/pagination.html" %}
+{% endblock %}
